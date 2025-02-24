@@ -8,10 +8,12 @@
     <p>My name is Irakli. we're going to learn Next.js!</p>
     <button id="myButton">Click me!</button>
     <script>
-      var button = document.getElementById("myButton");
-      button.addEventListener("click", function () {
-        alert("Woohoo! You have clicked this button!");
-      });
+      const person = {
+        name: "Irakli",
+        age: 28,
+      };
+      const copy = { ...person };
+      console.log(copy);
     </script>
   </body>
 </html>
