@@ -1,34 +1,39 @@
 "use client";
 
-import { useContext, useState } from "react";
-import React from "react";
-import Welcome from "@/components/welcome";
-
-const ThemeContext = React.createContext();
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
-  const [theme, setTheme] = useState("light");
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      <Welcome />
-      <Toolbar />
-    </ThemeContext.Provider>
-  );
+  return <App />;
 };
 
-function Toolbar() {
-  return <ThemeSwitch />;
+function useFetch(url: string) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    async function fetData() {
+      const response = await fetch(url);
+      const jsonData = await response.json();
+      setData(jsonData);
+      setLoading(false);
+    }
+    fetData();
+  }, [url]);
+  return { data, loading };
 }
 
-function ThemeSwitch() {
-  const { theme, setTheme } = useContext(ThemeContext);
-  function toggleTheme() {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  }
+function App() {
+  const { data, loading } = useFetch("https://dummyjson.com/posts");
   return (
-    <button onClick={toggleTheme}>
-      Switch to {theme === "light" ? "dark" : "light"} theme
-    </button>
+    <div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <p>
+          Data:
+          {JSON.stringify(data)}
+        </p>
+      )}
+    </div>
   );
 }
 
